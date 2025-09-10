@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>เข้าสู่ระบบ - วัฒนธรรม เกาหลี</title>
+  <link rel="stylesheet" href="css/style.css" />
+  
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-image: url('https://png.pngtree.com/thumb_back/fh260/background/20231030/pngtree-abstract-artwork-lilac-pastel-watercolor-texture-background-in-purple-hues-image_13786200.png');
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .login-container {
+      background-color: rgba(171, 136, 236, 0.95);
+      padding: 40px 30px;
+      border-radius: 10px;
+      box-shadow: 0 8px 20px rgba(255, 252, 252, 0.356);
+      width: 100%;
+      max-width: 400px;
+    }
+
+    .login-container h2 {
+      text-align: center;
+      margin-bottom: 25px;
+      color: #ffffff;
+    }
+
+    .login-container input[type="text"],
+    .login-container input[type="password"] {
+      width: 100%;
+      padding: 12px;
+      margin: 10px 0 20px 0;
+      border: 1px solid #b88bb0;
+      border-radius: 5px;
+      box-sizing: border-box;
+      font-size: 16px;
+    }
+
+    .login-container input[type="submit"],
+    .login-container button {
+      width: 100%;
+      background-color: #9016c9;
+      color: rgb(202, 145, 216);
+      padding: 14px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 16px;
+      transition: background 0.3s;
+      margin-top: 10px;
+    }
+
+    .login-container input[type="submit"]:hover,
+    .login-container button:hover {
+      background-color: #a663ac;
+    }
+
+    .login-container .forgot {
+      display: block;
+      text-align: right;
+      font-size: 14px;
+      color: #e283c4;
+      text-decoration: none;
+    }
+
+    .toggle-link {
+      text-align: center;
+      margin-top: 15px;
+      font-size: 14px;
+      cursor: pointer;
+      color: #f8f8f8;
+    }
+
+    .toggle-link:hover {
+      text-decoration: underline;
+    }
+    
+  </style>
+</head>
+<body>
+
+  <div class="login-container">
+    <h2 id="form-title">เข้าสู่ระบบ</h2>
+    <form id="loginForm">
+      <input type="text" id="username" placeholder="ชื่อผู้ใช้" required />
+      <input type="password" id="password" placeholder="รหัสผ่าน" required />
+      <input type="submit" id="submitBtn" value="เข้าสู่ระบบ" />
+    </form>
+    <div class="toggle-link" id="toggleForm">ยังไม่มีบัญชี? สมัครสมาชิก</div>
+  </div>
+
+  <script>
+    const form = document.getElementById("loginForm");
+    const toggleLink = document.getElementById("toggleForm");
+    const formTitle = document.getElementById("form-title");
+    const submitBtn = document.getElementById("submitBtn");
+
+    let isLogin = true;
+
+    toggleLink.addEventListener("click", () => {
+      isLogin = !isLogin;
+      formTitle.textContent = isLogin ? "เข้าสู่ระบบ" : "สมัครสมาชิก";
+      submitBtn.value = isLogin ? "เข้าสู่ระบบ" : "สมัครสมาชิก";
+      toggleLink.textContent = isLogin ? "ยังไม่มีบัญชี? สมัครสมาชิก" : "มีบัญชีอยู่แล้ว? เข้าสู่ระบบ";
+    });
+
+    form.addEventListener("submit", function (e) {
+      e.preventDefault();
+
+      const username = document.getElementById("username").value;
+      const password = document.getElementById("password").value;
+
+      if (isLogin) {
+        
+        const savedUser = localStorage.getItem(username);
+        if (savedUser && JSON.parse(savedUser).password === password) {
+          localStorage.setItem("currentUser", username);
+          alert("เข้าสู่ระบบสำเร็จ!");
+          window.location.href = "home.html";
+        } else {
+          alert("ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง");
+        }
+      } else {
+        
+        if (localStorage.getItem(username)) {
+          alert("ชื่อผู้ใช้นี้มีอยู่แล้ว กรุณาใช้ชื่ออื่น");
+        } else {
+          const userData = {
+            username,
+            password
+          };
+          localStorage.setItem(username, JSON.stringify(userData));
+          alert("สมัครสมาชิกสำเร็จ! กรุณาเข้าสู่ระบบ");
+           
+          isLogin = true;
+          formTitle.textContent = "เข้าสู่ระบบ";
+          submitBtn.value = "เข้าสู่ระบบ";
+          toggleLink.textContent = "ยังไม่มีบัญชี? สมัครสมาชิก";
+        }
+      }
+    });
+  </script>
+
+</body>
+</html>
